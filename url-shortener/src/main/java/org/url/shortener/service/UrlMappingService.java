@@ -8,6 +8,7 @@ import org.url.shortener.models.User;
 import org.url.shortener.repository.UrlMappingRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -25,6 +26,13 @@ public class UrlMappingService {
         urlMapping.setCreatedDate(LocalDateTime.now());
         UrlMapping savedUrlMapping = urlMappingRepository.save(urlMapping);
         return convertToDto(savedUrlMapping);
+    }
+
+    public List<UrlMappingDTO> getUrlsByUser(User user) {
+        return urlMappingRepository.findByUser(user)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
     }
 
     private UrlMappingDTO convertToDto(UrlMapping urlMapping) {
@@ -50,6 +58,7 @@ public class UrlMappingService {
 
         return shortUrl.toString();
     }
+
 
 }
 
