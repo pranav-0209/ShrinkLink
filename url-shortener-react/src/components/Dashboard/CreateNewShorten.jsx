@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useStoreContext } from '../../contextApi/ContextApi';
 import { useForm } from 'react-hook-form';
-import { data } from 'autoprefixer';
 import TextField from '../TextField';
 import { Tooltip } from '@mui/material';
 import { RxCross2 } from 'react-icons/rx';
@@ -44,7 +43,16 @@ const CreateNewShorten = ({ setOpen, refetch }) => {
             });
           });
 
-          // await refetch();
+          // refresh parent's list so the new short url appears immediately
+          if (typeof refetch === "function") {
+            try {
+              await refetch();
+            } catch (e) {
+              // non-blocking: still proceed even if refetch fails
+              console.error("refetch failed", e);
+            }
+          }
+
           reset();
           setOpen(false);
     } catch (error) {
